@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Siswa SMP MANGUN JAYA 01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo_sekolah1.jpg.png" type="image/jpeg">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-container">
+                        <div class="logo-frame">
+                            <img src="logo_sekolah1.jpg.png" alt="Logo SMP MANGUN JAYA 01" class="logo-sekolah">
+                        </div>
+                    </div>
+                    <div class="school-info">
+                        <h1>Sistem Absensi Siswa</h1>
+                        <p>SMP MANGUN JAYA 01 TAMBUN SELATAN</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#dashboard" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#absensi" class="nav-item"><i class="fas fa-clipboard-check"></i> Absensi</a></li>
+                        <li><a href="#rekap" class="nav-item"><i class="fas fa-list-alt"></i> Rekap Absensi</a></li>
+                        <li><a href="#export" class="nav-item"><i class="fas fa-file-export"></i> Export Data</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-menu-list">
+            <li><a href="#dashboard" class="mobile-nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#absensi" class="mobile-nav-item"><i class="fas fa-clipboard-check"></i> Absensi</a></li>
+            <li><a href="#rekap" class="mobile-nav-item"><i class="fas fa-list-alt"></i> Rekap Absensi</a></li>
+            <li><a href="#export" class="mobile-nav-item"><i class="fas fa-file-export"></i> Export Data</a></li>
+        </ul>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <section id="dashboard" class="section-container active-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    <span class="current-date" id="currentDate"></span>
+                </div>
+                
+                <div class="stats-overview">
+                    <div class="stat-card hadir">
+                        <i class="fas fa-user-check"></i>
+                        <p>Hadir</p>
+                        <span id="statHadir">0</span>
+                    </div>
+                    <div class="stat-card sakit">
+                        <i class="fas fa-hospital"></i>
+                        <p>Sakit</p>
+                        <span id="statSakit">0</span>
+                    </div>
+                    <div class="stat-card izin">
+                        <i class="fas fa-user-tag"></i>
+                        <p>Izin</p>
+                        <span id="statIzin">0</span>
+                    </div>
+                    <div class="stat-card alpa">
+                        <i class="fas fa-user-times"></i>
+                        <p>Alpa</p>
+                        <span id="statAlpa">0</span>
+                    </div>
+                    <div class="stat-card skorsing">
+                        <i class="fas fa-ban"></i>
+                        <p>Skorsing</p>
+                        <span id="statSkorsing">0</span>
+                    </div>
+                </div>
+
+                <div class="chart-section card">
+                    <h3>Statistik Absensi (Data Difilter)</h3>
+                    <div class="chart-container">
+                        <canvas id="absensiChart"></canvas>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="absensi" class="section-container">
+    <div class="section-header">
+        <h2><i class="fas fa-clipboard-check"></i> Input Absensi</h2>
+    </div>
+    
+    <div class="card">
+        <form id="formAbsensi" class="form-absensi">
+            <div class="form-group">
+                <label for="tanggal">Tanggal:</label>
+                <input type="date" id="tanggal" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="kelas">Kelas:</label>
+                <select id="kelas" required>
+                    <option value="" disabled selected>Pilih Kelas</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                    <option value="IX">IX</option>
+            </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="namaSiswa">Nama Siswa:</label>
+                <input type="text" id="namaSiswa" list="namaSiswaList" placeholder="Ketik nama siswa..." required autocomplete="off">
+                <datalist id="namaSiswaList"></datalist>
+            </div>
+
+            <div class="form-group status-group">
+                <label>Status Kehadiran:</label>
+                <div class="status-options">
+                    <label class="status-radio hadir-bg">
+                        <input type="radio" name="status" value="Hadir" checked>
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Hadir</span>
+                    </label>
+                    <label class="status-radio sakit-bg">
+                        <input type="radio" name="status" value="Sakit">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Sakit</span>
+                    </label>
+                    <label class="status-radio izin-bg">
+                        <input type="radio" name="status" value="Izin">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Izin</span>
+                    </label>
+                    <label class="status-radio alpa-bg">
+                        <input type="radio" name="status" value="Alpa">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Alpa</span>
+                    </label>
+                    <label class="status-radio skorsing-bg">
+                        <input type="radio" name="status" value="Skorsing">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Skorsing</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-action">
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Simpan Absensi</button>
+            </div>
+        </form>
+    </div>
+</section>
+            <section id="rekap" class="section-container">
+                <div class="section-header">
+                    <h2><i class="fas fa-list-alt"></i> Rekap Absensi</h2>
+                </div>
+
+                <div class="card filter-card">
+                    <h3>Filter Data</h3>
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="filterKelas">Kelas:</label>
+                            <select id="filterKelas">
+                                <option value="all">Semua Kelas</option>
+                                <option value="VII">VII</option>
+                                <option value="VIII">VIII</option>
+                                <option value="IX">IX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterStatus">Status:</label>
+                            <select id="filterStatus">
+                                <option value="all">Semua Status</option>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Sakit">Sakit</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Alpa">Alpa</option>
+                                <option value="Skorsing">Skorsing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterTanggalMulai">Tanggal Mulai:</label>
+                            <input type="date" id="filterTanggalMulai">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterTanggalSampai">Tanggal Sampai:</label>
+                            <input type="date" id="filterTanggalSampai">
+                        </div>
+                        <div class="filter-actions">
+                            <button id="resetFilter" class="btn-secondary">Reset Filter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-header">
+                        <h3>Data Absensi (<span id="totalData">0</span> Data)</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tabelRekap" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Kelas</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Menampilkan <span id="pageStart">0</span> - <span id="pageEnd">0</span> dari <span id="totalRecords">0</span> data
+                        </div>
+                        <div class="pagination-controls">
+                            <button id="prevPage" class="btn-pagination" disabled><i class="fas fa-chevron-left"></i> Sebelumnya</button>
+                            <div class="page-numbers" id="pageNumbers">
+                                </div>
+                            <button id="nextPage" class="btn-pagination" disabled>Berikutnya <i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="export" class="section-container">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-export"></i> Export Data</h2>
+                </div>
+                
+                <div class="card">
+                    <h3>Laporan Harian (Data Terfilter)</h3>
+                    <p>Export data absensi harian (sesuai filter di halaman Rekap) ke format Excel atau PDF.</p>
+                    <div class="export-options">
+                        <button id="downloadExcelHarian" class="btn-export btn-excel"><i class="fas fa-file-excel"></i> Export Excel Harian</button>
+                        <button id="downloadPdfHarian" class="btn-export btn-pdf"><i class="fas fa-file-pdf"></i> Export PDF Harian</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Laporan Total (Rekap Keseluruhan)</h3>
+                    <p>Export ringkasan total kehadiran setiap siswa (menggunakan **SEMUA** data absensi) ke format Excel atau PDF.</p>
+                    <div class="export-options">
+                        <button id="downloadExcelTotal" class="btn-export btn-excel"><i class="fas fa-file-excel"></i> Export Excel Total</button>
+                        <button id="downloadPdfTotal" class="btn-export btn-pdf"><i class="fas fa-file-pdf"></i> Export PDF Total</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Data Absensi</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editTanggal">Tanggal:</label>
+                    <input type="date" id="editTanggal" required>
+                </div>
+                <div class="form-group">
+                    <label for="editNamaSiswa">Nama Siswa:</label>
+                    <input type="text" id="editNamaSiswa" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="editKelas">Kelas:</label>
+                    <input type="text" id="editKelas" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status:</label>
+                    <select id="editStatus" required>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Alpa">Alpa</option>
+                        <option value="Skorsing">Skorsing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEdit" class="btn-secondary">Batal</button>
+                <button id="saveEdit" class="btn-primary">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-alt"></i> Konfirmasi Hapus</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus data absensi ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDelete" class="btn-secondary">Batal</button>
+                <button id="confirmDelete" class="btn-danger">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i id="toast-icon" class="fas fa-check-circle"></i>
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <strong>&copy; <span id="currentYear"></span> SMP MANGUN JAYA 01.</strong> All rights reserved.
+                </div>
+                <div class="footer-version">
+                    <b>Versi</b> 1.2.0
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
